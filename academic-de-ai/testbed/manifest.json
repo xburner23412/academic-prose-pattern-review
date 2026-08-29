@@ -1,0 +1,44 @@
+{
+  "schema": "academic-de-ai-testbed-1.0",
+  "documents": [
+    {
+      "document_id": "A01",
+      "path": "testbed/A01.md",
+      "source": "Unpublished AI-assisted literature review, about 5,000 words. AI-use disclosure present; generation and editing history incomplete.",
+      "year": null,
+      "role": "development_pilot",
+      "sha256": "f10ca4db30dd17119c9827a47e80d04c59cf3ed9eaa0c5fe2d6dd87b7f7af5aa",
+      "text_distributed": false
+    },
+    {
+      "document_id": "H01",
+      "path": "testbed/H01.md",
+      "source": "Farah, Ionta, and Horowitz-Kraus, Frontiers in Psychology",
+      "year": 2021,
+      "role": "context_bench",
+      "sha256": "af64f7b5e560dc444042a2656fe601f93c6774fa2744ff866c44c74ed1db5cec",
+      "text_distributed": false
+    },
+    {
+      "document_id": "H02",
+      "path": "testbed/H02.md",
+      "source": "Nicolson and Fawcett, Frontiers in Psychology",
+      "year": 2019,
+      "role": "context_bench",
+      "sha256": "9c964cdcb824802aba5def5a3681f3fe89273d0af980ac95157e4effe282ce5c",
+      "text_distributed": false
+    },
+    {
+      "document_id": "H03",
+      "path": "testbed/H03.md",
+      "source": "Pre-ChatGPT Frontiers review on mathematical giftedness",
+      "year": 2017,
+      "role": "context_bench",
+      "sha256": "7736911da01c291328deef9c09edbdb0264af62e816667079a2d8fdc2fc6de52",
+      "text_distributed": false
+    }
+  ],
+  "boundary": "Context-bench documents expose legitimate and protected uses in real academic prose. They are not the primary effectiveness test and do not veto a rule. A01 is development-only; stable effectiveness requires held-out AI academic texts from multiple model families, topics, and editing levels.",
+  "effectiveness_status": "not_established",
+  "distribution_note": "Document texts are not redistributed. A01 is unpublished third-party material; H01-H03 are open-access articles whose licences permit reuse but which are not this project's to ship. The SHA-256 values let you verify you have the same bytes."
+}

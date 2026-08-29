@@ -1,0 +1,144 @@
+{
+  "schema": "academic-de-ai-context-review-1.0",
+  "rule_table_revision": 1,
+  "reviewed_all_automatic_marks": true,
+  "labels": {
+    "A01": {
+      "feature_present": [
+        "M0005",
+        "M0006",
+        "M0012",
+        "M0020",
+        "M0021",
+        "M0022",
+        "M0023",
+        "M0026",
+        "M0028"
+      ],
+      "protected_or_functional": [
+        "M0002",
+        "M0003",
+        "M0004",
+        "M0007",
+        "M0008",
+        "M0009",
+        "M0010",
+        "M0011",
+        "M0013",
+        "M0014",
+        "M0015",
+        "M0017",
+        "M0024",
+        "M0025",
+        "M0027"
+      ],
+      "rule_misfire": [
+        "M0001",
+        "M0016",
+        "M0018",
+        "M0019"
+      ]
+    },
+    "H01": {
+      "feature_present": [
+        "M0010",
+        "M0011",
+        "M0015",
+        "M0016"
+      ],
+      "protected_or_functional": [
+        "M0001",
+        "M0002",
+        "M0003",
+        "M0004",
+        "M0005",
+        "M0006",
+        "M0007",
+        "M0008",
+        "M0009",
+        "M0013",
+        "M0014"
+      ],
+      "rule_misfire": [
+        "M0012"
+      ]
+    },
+    "H02": {
+      "feature_present": [
+        "M0032"
+      ],
+      "protected_or_functional": [
+        "M0001",
+        "M0002",
+        "M0003",
+        "M0004",
+        "M0005",
+        "M0006",
+        "M0007",
+        "M0008",
+        "M0010",
+        "M0012",
+        "M0013",
+        "M0014",
+        "M0015",
+        "M0016",
+        "M0017",
+        "M0018",
+        "M0019",
+        "M0020",
+        "M0021",
+        "M0022",
+        "M0023",
+        "M0024",
+        "M0025",
+        "M0026",
+        "M0027",
+        "M0028",
+        "M0029",
+        "M0030",
+        "M0031",
+        "M0033",
+        "M0034",
+        "M0035",
+        "M0036",
+        "M0037",
+        "M0038",
+        "M0039"
+      ],
+      "rule_misfire": [
+        "M0009",
+        "M0011"
+      ]
+    },
+    "H03": {
+      "feature_present": [
+        "M0002",
+        "M0004",
+        "M0006",
+        "M0015"
+      ],
+      "protected_or_functional": [
+        "M0001",
+        "M0003",
+        "M0005",
+        "M0007",
+        "M0008",
+        "M0009",
+        "M0010",
+        "M0011",
+        "M0012",
+        "M0013",
+        "M0014"
+      ],
+      "rule_misfire": []
+    }
+  },
+  "notes": [
+    "Labels judge rule-table revision 1 automatic triggers in context, not the quality or authorship of the document.",
+    "The stored run snapshots precede later rule revisions and verification-status updates; current executable status lives only in rules.json.",
+    "A feature_present label can still be legitimate prose; it means the semantic construction is present.",
+    "H03 M0007 motivated the task-material research-question protection added after this read.",
+    "RHT-01 technical noise and scaffold uses demonstrate why conventionality remains a contextual protection rather than a word blacklist."
+  ],
+  "reviewed_runs_not_distributed": "Per-run snapshots quote the reviewed articles and are therefore not redistributed. Regenerate them by running mark_patterns.py over documents matching the SHA-256 values in manifest.json."
+}

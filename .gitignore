@@ -1,0 +1,19 @@
+# Reviewed manuscripts and their reports never belong in this repository.
+*.review.json
+report.html
+review.json
+
+# Testbed document texts are third-party articles. The manifest records their
+# SHA-256; the bytes are not redistributed.
+academic-de-ai/testbed/*.md
+academic-de-ai/testbed/*.xml
+academic-de-ai/testbed/*.docx
+academic-de-ai/testbed/*.pdf
+academic-de-ai/testbed/reviews/
+
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+Thumbs.db
+~$*

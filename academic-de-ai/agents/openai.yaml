@@ -1,0 +1,7 @@
+interface:
+  display_name: "Academic De-AI"
+  short_description: "Audit formulaic patterns in academic prose"
+  default_prompt: "Use $academic-de-ai to review this academic text without editing it."
+policy:
+  allow_implicit_invocation: false
+
