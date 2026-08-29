@@ -85,6 +85,13 @@ python academic-de-ai/scripts/render_marked_report.py review.json --out report.h
 python academic-de-ai/scripts/validate_review.py review.json --source article.md
 ```
 
+Add `--source article.md` to the renderer to lay the manuscript out with every
+mark highlighted in place, coloured by how the mark was adjudicated. The file
+must still hash to the value recorded in the review; a source that has moved on
+is refused rather than annotated with stale offsets. Without `--source` the
+report lists quotations only, which keeps a review JSON shareable without the
+manuscript attached.
+
 Running the script by itself is a **fast scan**. It prints the reading rules it
 did not check, and the report is labelled partial. A full review — scan plus a
 reading pass over the whole text, plus contextual adjudication of every

@@ -39,7 +39,11 @@ Read [references/patterns.md](references/patterns.md) before reviewing. Treat
    offsets, quote and source locator. Change `reading_coverage.status` to
    `complete` only after every included section has been read.
 5. Render with `scripts/render_marked_report.py review.json --out report.html
-   --lang LANG`, where `LANG` follows the user's language (`en` fallback).
+   --lang LANG`, where `LANG` follows the user's language (`en` fallback). Add
+   `--source SOURCE` to lay the manuscript out with every mark in place; the
+   file must still hash to the value recorded in the review, and rendering is
+   refused when it does not. Without `--source` the report lists quotations
+   only, so a review JSON stays shareable without the manuscript.
 6. Report the marks, protected passages, document observations and limits. Do
    not silently turn a mark into a proposed edit.
 

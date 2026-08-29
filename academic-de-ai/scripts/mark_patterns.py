@@ -41,7 +41,9 @@ def validate_rules(data):
         v = r.get("verification", {})
         if v.get("status") not in {"verified", "regression_only", "unverified"} or v.get("rule_revision") != r.get("rule_revision"):
             raise ValueError(f"{r.get('code')}: stale or invalid verification")
-        for p in r.get("patterns", []): re.compile(p["regex"], re.I | re.S)
+        for p in r.get("patterns", []):
+            re.compile(p["regex"], re.I | re.S)
+            if "exclude" in p: re.compile(p["exclude"], re.I | re.S)
         for key in ("list_a", "list_b"):
             if key in r and r[key] not in lists: raise ValueError(f"{r['code']}: missing list {r[key]}")
         if r.get("cluster",{}).get("scope") not in {None,"sentence","paragraph"}: raise ValueError(f"{r['code']}: invalid cluster scope")
@@ -171,10 +173,24 @@ def cluster_matches(rule,text,lists):
     watched=set(map(str.lower,lists[cluster["word_list"]])); present={x.lower() for x in words(text) if x.lower() in watched}
     return [(0,len(text),cluster["family"])] if len(present)>=cluster["min_distinct"] else []
 
+def pattern_matches(pattern,text):
+    """Matches for one pattern, minus any its `exclude` disqualifies.
+
+    Python's re has no variable-width lookbehind, so a rule cannot say "not when
+    a separation verb governs this from". `exclude` is tested against a window
+    ending at the match, which reaches the governing verb without one lookbehind
+    per verb form.
+    """
+    exclude=pattern.get("exclude"); window=int(pattern.get("exclude_window",60)); out=[]
+    for m in re.finditer(pattern["regex"],text,re.I|re.S):
+        if exclude and re.search(exclude,text[max(0,m.start()-window):m.end()],re.I|re.S): continue
+        out.append((m.start(),m.end(),pattern["family"]))
+    return out
+
 def rule_matches(rule,text,lists,include_cluster=True):
     found=[]; kind=rule["kind"]
     if kind=="regex":
-        for p in rule.get("patterns",[]): found += [(m.start(),m.end(),p["family"]) for m in re.finditer(p["regex"],text,re.I|re.S)]
+        for p in rule.get("patterns",[]): found += pattern_matches(p,text)
         if include_cluster: found += cluster_matches(rule,text,lists)
     elif kind=="slots":
         for f in rule["families"]:
@@ -189,7 +205,7 @@ def rule_matches(rule,text,lists,include_cluster=True):
         found += [(m.start(),m.end(),"abstract_physical_pair") for m in re.finditer(pattern,text,re.I)]
     elif kind=="frame":
         raw=[]
-        for p in rule.get("patterns",[]): raw += [(m.start(),m.end(),p["family"]) for m in re.finditer(p["regex"],text,re.I|re.S)]
+        for p in rule.get("patterns",[]): raw += pattern_matches(p,text)
         if len(raw)>=int(rule.get("threshold",2)): found=raw
     return found
 

@@ -1,12 +1,90 @@
 {
   "schema": "1.0",
   "word_lists": {
-    "evaluated_nouns": ["answer", "case", "consequence", "consequences", "finding", "findings", "implication", "implications", "message", "part", "point", "position", "result", "results", "task"],
-    "evaluation_adjectives": ["clear", "obvious", "straightforward", "simple", "serious", "informative", "important", "honest"],
-    "evaluation_superlatives": ["clearest", "most important", "most informative", "most compelling", "most significant", "most decisive"],
-    "abstract_nouns": ["account", "age", "argument", "claim", "construct", "control", "deficit", "distinction", "effect", "evidence", "explanation", "finding", "findings", "framework", "heterogeneity", "hypothesis", "inhibition", "interpretation", "label", "mechanism", "model", "neurophysiology", "pattern", "risk", "theory", "variability"],
-    "physical_vehicles": ["brake", "bridge", "engine", "lens", "noise", "scaffold", "vacuum"],
-    "inflated_words": ["compelling", "crucial", "definitive", "powerful", "profound", "remarkable", "robust", "striking", "sweeping", "pivotal"]
+    "evaluated_nouns": [
+      "answer",
+      "case",
+      "consequence",
+      "consequences",
+      "finding",
+      "findings",
+      "implication",
+      "implications",
+      "message",
+      "part",
+      "point",
+      "position",
+      "result",
+      "results",
+      "task"
+    ],
+    "evaluation_adjectives": [
+      "clear",
+      "obvious",
+      "straightforward",
+      "simple",
+      "serious",
+      "informative",
+      "important",
+      "honest"
+    ],
+    "evaluation_superlatives": [
+      "clearest",
+      "most important",
+      "most informative",
+      "most compelling",
+      "most significant",
+      "most decisive"
+    ],
+    "abstract_nouns": [
+      "account",
+      "age",
+      "argument",
+      "claim",
+      "construct",
+      "control",
+      "deficit",
+      "distinction",
+      "effect",
+      "evidence",
+      "explanation",
+      "finding",
+      "findings",
+      "framework",
+      "heterogeneity",
+      "hypothesis",
+      "inhibition",
+      "interpretation",
+      "label",
+      "mechanism",
+      "model",
+      "neurophysiology",
+      "pattern",
+      "risk",
+      "theory",
+      "variability"
+    ],
+    "physical_vehicles": [
+      "brake",
+      "bridge",
+      "engine",
+      "lens",
+      "noise",
+      "scaffold",
+      "vacuum"
+    ],
+    "inflated_words": [
+      "compelling",
+      "crucial",
+      "definitive",
+      "powerful",
+      "profound",
+      "remarkable",
+      "robust",
+      "striking",
+      "sweeping",
+      "pivotal"
+    ]
   },
   "detection_rules": [
     {
@@ -23,7 +101,25 @@
       "note": "An abstract construct is coupled to an unusually physical vehicle. Conventional disciplinary metaphors and negated figures are protected.",
       "note_zh": "抽象概念被配上异常具体的物理意象；学科惯用语和被否定的比喻需要保护。",
       "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 4}, "H01": {"marks": 0}, "H02": {"marks": 10}, "H03": {"marks": 0}}, "note": "All automatic marks reread; conventional technical noise/scaffold uses remain contextual protections."}
+      "verification": {
+        "status": "verified",
+        "rule_revision": 1,
+        "documents": {
+          "A01": {
+            "marks": 4
+          },
+          "H01": {
+            "marks": 0
+          },
+          "H02": {
+            "marks": 10
+          },
+          "H03": {
+            "marks": 0
+          }
+        },
+        "note": "All automatic marks reread; conventional technical noise/scaffold uses remain contextual protections."
+      }
     },
     {
       "code": "RHT-02",
@@ -34,13 +130,28 @@
       "enabled": true,
       "span": "sentence",
       "patterns": [
-        {"family": "evaluative_punchline", "regex": "^(?:the|this)\\s+(?:point|message|lesson|conclusion|position|consequence)\\s+(?:is|seems|appears|remains)\\s+(?:clear|simple|straightforward|obvious|serious|inescapable)[.:]?$"},
-        {"family": "dramatic_fragment", "regex": "^(?:the old rules were gone|nothing else comes close|that changes everything|the rest follows)[.!]?$"}
+        {
+          "family": "evaluative_punchline",
+          "regex": "^(?:the|this)\\s+(?:point|message|lesson|conclusion|position|consequence)\\s+(?:is|seems|appears|remains)\\s+(?:clear|simple|straightforward|obvious|serious|inescapable)[.:]?$"
+        },
+        {
+          "family": "dramatic_fragment",
+          "regex": "^(?:the old rules were gone|nothing else comes close|that changes everything|the rest follows)[.!]?$"
+        }
       ],
       "note": "A polished verdict may restate nearby content mainly for rhetorical force. One short sentence alone is not enough unless it matches a strong frame.",
       "note_zh": "精致结论句可能只为制造力度而重复前文；普通短句本身不构成标记。",
       "rule_revision": 1,
-      "verification": {"status": "regression_only", "rule_revision": 1, "documents": {"positive_fixture": {"marks": 1}}, "note": "Positive and negative regression fixtures pass; no context-bench occurrence."}
+      "verification": {
+        "status": "regression_only",
+        "rule_revision": 1,
+        "documents": {
+          "positive_fixture": {
+            "marks": 1
+          }
+        },
+        "note": "Positive and negative regression fixtures pass; no context-bench occurrence."
+      }
     },
     {
       "code": "RHT-03",
@@ -53,7 +164,12 @@
       "note": "Judge whether the opposition is false or compresses necessary qualifications. Ordinary rather-than distinctions are not marks.",
       "note_zh": "阅读全文判断对立是否虚假或压缩了必要限定；普通 rather than 区分不标。",
       "rule_revision": 1,
-      "verification": {"status": "unverified", "rule_revision": 1, "documents": {}, "note": "Reading rule; pending full-text review."}
+      "verification": {
+        "status": "unverified",
+        "rule_revision": 1,
+        "documents": {},
+        "note": "Reading rule; pending full-text review."
+      }
     },
     {
       "code": "RHT-04",
@@ -63,11 +179,39 @@
       "review_priority": "low",
       "enabled": true,
       "span": "clause",
-      "patterns": [{"family": "from_to_range", "regex": "\\bfrom\\s+[^,.;:]{2,55}?\\s+to\\s+[^,.;:]{2,55}"}],
-      "note": "Review whether the endpoints form a real scale, sequence, or interval. Real temporal, numeric, and process ranges are protected.",
-      "note_zh": "检查两端是否构成真实尺度、顺序或区间；真实时间、数值和过程范围应保留。",
-      "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 3}, "H01": {"marks": 3}, "H02": {"marks": 7}, "H03": {"marks": 5}}, "note": "All surface candidates reread; numeric/process ranges are functional and infinitival joins are recorded misfires."}
+      "patterns": [
+        {
+          "family": "from_to_range",
+          "regex": "\\bfrom\\s+[^,.;:]{2,55}?\\s+to\\s+[^,.;:]{2,55}",
+          "exclude": "\\b(?:separat\\w*|distinguish\\w*|differentiat\\w*|discriminat\\w*|disentangl\\w*|tell|told|apart)\\s+[^,.;:]{0,40}?\\bfrom\\b",
+          "exclude_window": 80
+        }
+      ],
+      "note": "Review whether the endpoints form a real scale, sequence, or interval. Real temporal, numeric, and process ranges are protected. A `from` governed by a separation verb is excluded: `separate shared from unique contributions to X` is a complement, not a range.",
+      "note_zh": "检查两端是否构成真实尺度、顺序或区间；真实时间、数值和过程范围应保留。受分离类动词支配的 from 已排除：separate A from B to C 中的 from 是补语，不是范围起点。",
+      "rule_revision": 2,
+      "verification": {
+        "status": "verified",
+        "rule_revision": 2,
+        "documents": {
+          "A01": {
+            "marks": 3
+          },
+          "H01": {
+            "marks": 3
+          },
+          "H02": {
+            "marks": 7
+          },
+          "H03": {
+            "marks": 5
+          },
+          "unpublished_draft": {
+            "marks": 0
+          }
+        },
+        "note": "Revision 2 reread on the four testbed documents plus one unpublished draft not distributed with this repository, 18 hits. The separation-verb misfire is gone: `separate shared from unique contributions to the same three skills` no longer matches. Fourteen hits are functional ranges — temporal (`from the early 1950s to 2009`), numeric (`from age 6 to 49 years`), spatial (`from left to right`) and process (`from phonological decoding to whole word decoding`). Four remain the infinitival-join family recorded at revision 1 (`from an inability to perceive words`), where `to` heads an infinitive rather than a range terminus. Separating those needs part-of-speech information and is out of scope for a regex rule."
+      }
     },
     {
       "code": "META-01",
@@ -78,13 +222,55 @@
       "enabled": true,
       "span": "sentence",
       "families": [
-        {"family": "noun_copula_adjective", "noun_list": "evaluated_nouns", "adjective_list": "evaluation_adjectives", "copulas": ["is", "are", "seems", "seem", "appears", "appear", "remains", "remain"]},
-        {"family": "evaluative_superlative", "superlative_list": "evaluation_superlatives", "copulas": ["is", "are", "concerns", "involves", "would be"]}
+        {
+          "family": "noun_copula_adjective",
+          "noun_list": "evaluated_nouns",
+          "adjective_list": "evaluation_adjectives",
+          "copulas": [
+            "is",
+            "are",
+            "seems",
+            "seem",
+            "appears",
+            "appear",
+            "remains",
+            "remain"
+          ]
+        },
+        {
+          "family": "evaluative_superlative",
+          "superlative_list": "evaluation_superlatives",
+          "copulas": [
+            "is",
+            "are",
+            "concerns",
+            "involves",
+            "would be"
+          ]
+        }
       ],
       "note": "The prose announces that a point is clear, important, or the most informative instead of letting the evidence establish that ranking. Quantified or explicitly compared rankings are protected.",
       "note_zh": "文本替读者宣布某点最清楚或最重要；有量化依据或明确比较集合的排序应保护。",
       "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 2}, "H01": {"marks": 0}, "H02": {"marks": 0}, "H03": {"marks": 0}}, "note": "Both superlative constructions reread on A01; zero automatic marks on H01-H03."}
+      "verification": {
+        "status": "verified",
+        "rule_revision": 1,
+        "documents": {
+          "A01": {
+            "marks": 2
+          },
+          "H01": {
+            "marks": 0
+          },
+          "H02": {
+            "marks": 0
+          },
+          "H03": {
+            "marks": 0
+          }
+        },
+        "note": "Both superlative constructions reread on A01; zero automatic marks on H01-H03."
+      }
     },
     {
       "code": "META-02",
@@ -95,13 +281,37 @@
       "enabled": true,
       "span": "sentence",
       "patterns": [
-        {"family": "next_point_announcement", "regex": "\\b(?:the next section (?:turns|moves) to|this brings us to|we now turn to|now let us (?:consider|examine)|before considering .{1,50}, it is useful to)\\b"},
-        {"family": "reader_instruction", "regex": "\\b(?:it is important to note that|it should be noted that|the key point to remember is)\\b"}
+        {
+          "family": "next_point_announcement",
+          "regex": "\\b(?:the next section (?:turns|moves) to|this brings us to|we now turn to|now let us (?:consider|examine)|before considering .{1,50}, it is useful to)\\b"
+        },
+        {
+          "family": "reader_instruction",
+          "regex": "\\b(?:it is important to note that|it should be noted that|the key point to remember is)\\b"
+        }
       ],
       "note": "Mark complete navigation frames, never an isolated transition such as however or therefore.",
       "note_zh": "只标完整的空转导航框架，绝不因单个 however 或 therefore 产生标记。",
       "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 0}, "H01": {"marks": 2}, "H02": {"marks": 0}, "H03": {"marks": 3}}, "note": "Complete frames reread; isolated transition-word frequency remains removed."}
+      "verification": {
+        "status": "verified",
+        "rule_revision": 1,
+        "documents": {
+          "A01": {
+            "marks": 0
+          },
+          "H01": {
+            "marks": 2
+          },
+          "H02": {
+            "marks": 0
+          },
+          "H03": {
+            "marks": 3
+          }
+        },
+        "note": "Complete frames reread; isolated transition-word frequency remains removed."
+      }
     },
     {
       "code": "META-03",
@@ -111,11 +321,29 @@
       "review_priority": "low",
       "enabled": true,
       "span": "sentence",
-      "patterns": [{"family": "question_surface", "regex": "[^?]{3,}\\?"}],
+      "patterns": [
+        {
+          "family": "question_surface",
+          "regex": "[^?]{3,}\\?"
+        }
+      ],
       "note": "A question may stage emphasis rather than define a real research question. Declared research questions, headings, FAQs, and quoted questions are protected.",
       "note_zh": "问题可能只是制造强调；正式研究问题、标题、FAQ 和引文中的问题应保护。",
       "rule_revision": 2,
-      "verification": {"status": "regression_only", "rule_revision": 2, "documents": {"mixed_question_fixture": {"marks": 1, "protected": 1}, "attributed_quote_fixture": {"protected": 1}}, "note": "Protection is candidate-local except for explicitly enumerated research-question sequences; held-out AI-text verification is pending."}
+      "verification": {
+        "status": "regression_only",
+        "rule_revision": 2,
+        "documents": {
+          "mixed_question_fixture": {
+            "marks": 1,
+            "protected": 1
+          },
+          "attributed_quote_fixture": {
+            "protected": 1
+          }
+        },
+        "note": "Protection is candidate-local except for explicitly enumerated research-question sequences; held-out AI-text verification is pending."
+      }
     },
     {
       "code": "META-04",
@@ -128,7 +356,12 @@
       "note": "Check whether a closing section repeats generic challenges and optimism instead of ending on the last supported claim.",
       "note_zh": "检查收尾是否用泛泛挑战与乐观展望替代最后一项有证据的结论。",
       "rule_revision": 1,
-      "verification": {"status": "unverified", "rule_revision": 1, "documents": {}, "note": "Reading rule; pending full-text review."}
+      "verification": {
+        "status": "unverified",
+        "rule_revision": 1,
+        "documents": {},
+        "note": "Reading rule; pending full-text review."
+      }
     },
     {
       "code": "META-05",
@@ -141,7 +374,12 @@
       "note": "Check whether defensive framing answers an unattributed objection that the argument does not otherwise need.",
       "note_zh": "检查防御性表述是否在回应一个没有来源、论证也不需要的反对意见。",
       "rule_revision": 1,
-      "verification": {"status": "unverified", "rule_revision": 1, "documents": {}, "note": "Reading rule; pending full-text review."}
+      "verification": {
+        "status": "unverified",
+        "rule_revision": 1,
+        "documents": {},
+        "note": "Reading rule; pending full-text review."
+      }
     },
     {
       "code": "META-06",
@@ -154,7 +392,12 @@
       "note": "Check whether the text invents an option no serious reader would choose, rejects it, and never uses it again.",
       "note_zh": "检查文本是否制造一个无人会选的方案，随即否定，并再也不使用它。",
       "rule_revision": 1,
-      "verification": {"status": "unverified", "rule_revision": 1, "documents": {}, "note": "Reading rule; pending full-text review."}
+      "verification": {
+        "status": "unverified",
+        "rule_revision": 1,
+        "documents": {},
+        "note": "Reading rule; pending full-text review."
+      }
     },
     {
       "code": "STR-01",
@@ -165,14 +408,38 @@
       "enabled": true,
       "span": "paragraph",
       "patterns": [
-        {"family": "not_but", "regex": "\\bnot\\s+[^.;]{1,80}?\\s+but\\s+[^.;]{1,80}"},
-        {"family": "rather_than", "regex": "\\brather\\s+than\\b"}
+        {
+          "family": "not_but",
+          "regex": "\\bnot\\s+[^.;]{1,80}?\\s+but\\s+[^.;]{1,80}"
+        },
+        {
+          "family": "rather_than",
+          "regex": "\\brather\\s+than\\b"
+        }
       ],
       "threshold": 2,
       "note": "Mark only repeated contrast frames within a paragraph. A single contrast is ordinary academic prose.",
       "note_zh": "只标同段内反复出现的对照框架；单次对照属于普通学术表达。",
       "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 4}, "H01": {"marks": 0}, "H02": {"marks": 0}, "H03": {"marks": 0}}, "note": "Repeated-frame candidates reread; single-frame triggers remain removed."}
+      "verification": {
+        "status": "verified",
+        "rule_revision": 1,
+        "documents": {
+          "A01": {
+            "marks": 4
+          },
+          "H01": {
+            "marks": 0
+          },
+          "H02": {
+            "marks": 0
+          },
+          "H03": {
+            "marks": 0
+          }
+        },
+        "note": "Repeated-frame candidates reread; single-frame triggers remain removed."
+      }
     },
     {
       "code": "STR-02",
@@ -185,7 +452,12 @@
       "note": "Mark only when an item is redundant, vague, or rhythm-filling. Genuine three-part entities, databases, measures, and author lists are protected.",
       "note_zh": "只有某一项重复、空泛或明显补节奏时才标；真实三项对象、数据库、测量和作者名单应保护。",
       "rule_revision": 1,
-      "verification": {"status": "unverified", "rule_revision": 1, "documents": {}, "note": "Automatic triad detector removed after high-noise pilots."}
+      "verification": {
+        "status": "unverified",
+        "rule_revision": 1,
+        "documents": {},
+        "note": "Automatic triad detector removed after high-noise pilots."
+      }
     },
     {
       "code": "STR-04",
@@ -196,13 +468,25 @@
       "enabled": true,
       "span": "document",
       "min_paragraphs": 8,
-      "band_words": [50, 100],
-      "max_cv": 0.30,
-      "min_band_share": 0.70,
+      "band_words": [
+        50,
+        100
+      ],
+      "max_cv": 0.3,
+      "min_band_share": 0.7,
       "note": "A document observation, not an AI score or an edit target. Report raw within-document facts only and never recommend splitting or merging paragraphs to move the statistic.",
       "note_zh": "这是文档观察，不是 AI 分数或修改目标；只报告文档内部事实，绝不建议为改变统计量而拆并段落。",
       "rule_revision": 2,
-      "verification": {"status": "regression_only", "rule_revision": 2, "documents": {"configuration_fixture": {"observations": 1}}, "note": "The fixed word band is now executable configuration; held-out AI-text verification is pending."}
+      "verification": {
+        "status": "regression_only",
+        "rule_revision": 2,
+        "documents": {
+          "configuration_fixture": {
+            "observations": 1
+          }
+        },
+        "note": "The fixed word band is now executable configuration; held-out AI-text verification is pending."
+      }
     },
     {
       "code": "LEX-01",
@@ -213,14 +497,37 @@
       "enabled": true,
       "span": "sentence",
       "patterns": [
-        {"family": "promotional_phrase", "regex": "\\b(?:particularly promising|advance(?:s|d)? the field|transformative contribution|major breakthrough|opens? (?:a )?new avenue|lasting contribution|reshape(?:s|d)? the field)\\b"},
-        {"family": "importance_frame", "regex": "\\b(?:plays? a (?:crucial|pivotal|vital) role|underscores? (?:the |its )?(?:importance|significance)|marks? a (?:major|pivotal|significant) (?:shift|turning point))\\b"}
+        {
+          "family": "promotional_phrase",
+          "regex": "\\b(?:particularly promising|advance(?:s|d)? the field|transformative contribution|major breakthrough|opens? (?:a )?new avenue|lasting contribution|reshape(?:s|d)? the field)\\b"
+        },
+        {
+          "family": "importance_frame",
+          "regex": "\\b(?:plays? a (?:crucial|pivotal|vital) role|underscores? (?:the |its )?(?:importance|significance)|marks? a (?:major|pivotal|significant) (?:shift|turning point))\\b"
+        }
       ],
-      "cluster": {"word_list": "inflated_words", "min_distinct": 2, "scope": "paragraph", "family": "evaluative_cluster"},
+      "cluster": {
+        "word_list": "inflated_words",
+        "min_distinct": 2,
+        "scope": "paragraph",
+        "family": "evaluative_cluster"
+      },
       "note": "A complete promotional frame may be marked once; isolated watched words never produce a mark. This rule merges the former LEX-01, LEX-04, and OTHER-01 families.",
       "note_zh": "完整推销框架可单独标记；孤立关注词绝不产生标记。本规则合并旧 LEX-01、LEX-04 和 OTHER-01。",
       "rule_revision": 2,
-      "verification": {"status": "regression_only", "rule_revision": 2, "documents": {"paragraph_cluster_fixture": {"marks": 1}, "single_word_fixture": {"marks": 0}}, "note": "Paragraph-scope clustering now matches the declared scope; held-out AI-text verification is pending."}
+      "verification": {
+        "status": "regression_only",
+        "rule_revision": 2,
+        "documents": {
+          "paragraph_cluster_fixture": {
+            "marks": 1
+          },
+          "single_word_fixture": {
+            "marks": 0
+          }
+        },
+        "note": "Paragraph-scope clustering now matches the declared scope; held-out AI-text verification is pending."
+      }
     },
     {
       "code": "LEX-03",
@@ -230,11 +537,37 @@
       "review_priority": "low",
       "enabled": true,
       "span": "clause",
-      "patterns": [{"family": "ornate_copula", "regex": "\\b(?:serves? as|served as|stands? as|stood as|functions? as|operates? as|marks? (?:a|an|the) \\w+|boasts?)\\b"}],
-      "note": "Review whether a longer verb replaces a clearer is, are, or has. Technical meanings remain valid.",
-      "note_zh": "检查较长动词是否只是替代更清楚的 is、are 或 has；技术含义应保留。",
-      "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 1}, "H01": {"marks": 0}, "H02": {"marks": 0}, "H03": {"marks": 0}}, "note": "A01 occurrence reread and negative fixtures pass; narrow list retained."}
+      "patterns": [
+        {
+          "family": "ornate_copula",
+          "regex": "\\b(?:(?:serves?|served|stands?|stood|functions|operates?)\\s+as(?!\\s+(?:not|no|if|though|although|while|because)\\b)|marks?\\s+(?:a|an|the)\\s+\\w+|boasts?)\\b"
+        }
+      ],
+      "note": "Review whether a longer verb replaces a clearer is, are, or has. Technical meanings remain valid. Bare `function as` is excluded: in this field `executive function as` and `cognitive function as` are noun phrases, so only the unambiguous third-person `functions as` is matched. A plural subject with the bare verb is a known and accepted miss.",
+      "note_zh": "检查较长动词是否只是替代更清楚的 is、are 或 has；技术含义应保留。裸 function as 已排除：本领域 executive function / cognitive function 是名词短语，只匹配无歧义的第三人称 functions as。复数主语配裸动词是已知且接受的漏检。",
+      "rule_revision": 2,
+      "verification": {
+        "status": "verified",
+        "rule_revision": 2,
+        "documents": {
+          "A01": {
+            "marks": 1
+          },
+          "H01": {
+            "marks": 0
+          },
+          "H02": {
+            "marks": 0
+          },
+          "H03": {
+            "marks": 0
+          },
+          "unpublished_draft": {
+            "marks": 0
+          }
+        },
+        "note": "Revision 2 reread on the four testbed documents plus one unpublished draft not distributed with this repository. The A01 hit (`ERP features may serve as mechanistic intermediate phenotypes`) is a genuine ornate copula. The revision-1 misfire on `executive function as not being deficit-specific` is gone. Known and accepted miss: a plural subject with the bare verb, as in `these processes function as independent systems`."
+      }
     },
     {
       "code": "LEX-05",
@@ -244,11 +577,34 @@
       "review_priority": "low",
       "enabled": true,
       "span": "clause",
-      "patterns": [{"family": "significance_participle", "regex": ",\\s*(?:highlighting|underscoring|emphasizing|showcasing|reflecting|symbolizing|demonstrating)\\b[^.;]{0,120}"}],
+      "patterns": [
+        {
+          "family": "significance_participle",
+          "regex": ",\\s*(?:highlighting|underscoring|emphasizing|showcasing|reflecting|symbolizing|demonstrating)\\b[^.;]{0,120}"
+        }
+      ],
       "note": "Review whether the participial tail adds evidence or merely announces significance. Causal or procedural participles are not covered.",
       "note_zh": "检查分词尾巴是否增加证据，还是只宣布意义；因果或程序性分词不在此列。",
       "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 0}, "H01": {"marks": 1}, "H02": {"marks": 2}, "H03": {"marks": 0}}, "note": "All context-bench participial tails reread; contextual evidence addition remains decisive."}
+      "verification": {
+        "status": "verified",
+        "rule_revision": 1,
+        "documents": {
+          "A01": {
+            "marks": 0
+          },
+          "H01": {
+            "marks": 1
+          },
+          "H02": {
+            "marks": 2
+          },
+          "H03": {
+            "marks": 0
+          }
+        },
+        "note": "All context-bench participial tails reread; contextual evidence addition remains decisive."
+      }
     },
     {
       "code": "LOG-01",
@@ -258,11 +614,28 @@
       "review_priority": "high",
       "enabled": true,
       "span": "sentence",
-      "patterns": [{"family": "claim_strength", "regex": "\\b(?:prov(?:e|es|ed|en)|demonstrat(?:e|es|ed|ing)|establish(?:es|ed|ing)?|rul(?:e|es|ed|ing)\\s+out|settl(?:e|es|ed|ing))\\b"}],
+      "patterns": [
+        {
+          "family": "claim_strength",
+          "regex": "\\b(?:prov(?:e|es|ed|en)|demonstrat(?:e|es|ed|ing)|establish(?:es|ed|ing)?|rul(?:e|es|ed|ing)\\s+out|settl(?:e|es|ed|ing))\\b"
+        }
+      ],
       "note": "A strength cue asks for contextual review; it is not automatically excessive. Negation and task-manipulation uses are protected.",
       "note_zh": "强度词只触发语境复查，并不自动构成过强论断；否定用法和任务操纵用法应保护。",
       "rule_revision": 2,
-      "verification": {"status": "regression_only", "rule_revision": 2, "documents": {"negated_claim_fixture": {"protected": 1}, "affirmed_claim_fixture": {"marks": 1}}, "note": "Directly negated claim cues are protected; task-manipulation and evidential fit still require contextual reading."}
+      "verification": {
+        "status": "regression_only",
+        "rule_revision": 2,
+        "documents": {
+          "negated_claim_fixture": {
+            "protected": 1
+          },
+          "affirmed_claim_fixture": {
+            "marks": 1
+          }
+        },
+        "note": "Directly negated claim cues are protected; task-manipulation and evidential fit still require contextual reading."
+      }
     },
     {
       "code": "LOG-02",
@@ -272,20 +645,101 @@
       "review_priority": "high",
       "enabled": true,
       "span": "sentence",
-      "patterns": [{"family": "scope_cue", "regex": "\\b(?:all\\s+(?:children|participants|cases|disorders)|every\\s+(?:child|case|disorder)|universal(?:ly)?|unique\\s+to|the\\s+(?:single\\s+)?mechanism|across\\s+all\\s+groups)\\b"}],
+      "patterns": [
+        {
+          "family": "scope_cue",
+          "regex": "\\b(?:all\\s+(?:children|participants|cases|disorders)|every\\s+(?:child|case|disorder)|universal(?:ly)?|unique\\s+to|the\\s+(?:single\\s+)?mechanism|across\\s+all\\s+groups)\\b"
+        }
+      ],
       "note": "A scope cue asks whether the design supports the population, diagnosis, mechanism, or causal reach. Explicit conditions and bounded samples are protected.",
       "note_zh": "范围词提示检查设计是否支持相应人群、诊断、机制或因果范围；明确条件和限定样本应保护。",
       "rule_revision": 1,
-      "verification": {"status": "verified", "rule_revision": 1, "documents": {"A01": {"marks": 1}, "H01": {"marks": 0}, "H02": {"marks": 0}, "H03": {"marks": 0}}, "note": "A01 conditional scope cue reread; contextual protection remains mandatory."}
+      "verification": {
+        "status": "verified",
+        "rule_revision": 1,
+        "documents": {
+          "A01": {
+            "marks": 1
+          },
+          "H01": {
+            "marks": 0
+          },
+          "H02": {
+            "marks": 0
+          },
+          "H03": {
+            "marks": 0
+          }
+        },
+        "note": "A01 conditional scope cue reread; contextual protection remains mandatory."
+      }
     }
   ],
   "protections": [
-    {"code": "PROT-SECTION", "kind": "section", "names": ["references", "reference list", "bibliography", "acknowledgements", "acknowledgments", "publisher's note", "publisher’s note"], "patterns": ["\\b(?:declaration|statement)\\b.*\\b(?:ai|artificial intelligence|generative ai)\\b", "(?:appendix.*(?:method|methods|methodological)|(?:method|methods|methodological).*appendix)"]},
-    {"code": "PROT-AI", "kind": "document_statement", "patterns": ["\\bai[- ]assistance disclosure\\b", "\\b(?:this|the) (?:review|manuscript|paper|study)\\b.{0,120}\\b(?:ai[- ]assisted|ai tools? (?:assisted|were used)|artificial intelligence|generative ai)\\b", "\\bai tools? assisted with\\b"]},
-    {"code": "PROT-CITATION", "kind": "span", "patterns": ["\\([^()]{0,180}\\b(?:19|20)\\d{2}[a-z]?[^()]{0,80}\\)"]},
-    {"code": "PROT-NUMBER", "kind": "span", "patterns": ["\\b\\d+(?:[.,]\\d+)?%?\\b", "\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|first|second|third|fourth|fifth|sixth)\\b"]},
-    {"code": "PROT-HEDGE", "kind": "span", "patterns": ["\\b(?:may|might|could|suggests?|appears?|is consistent with|possibly|probably|likely|unlikely)\\b"]},
-    {"code": "PROT-NEGATION", "kind": "span", "patterns": ["\\b(?:not|no|never|neither|nor|does not|do not|did not|cannot|can't|without)\\b"]},
-    {"code": "PROT-QUESTION", "kind": "context", "patterns": ["\\b(?:this (?:review|paper|study) (?:addresses|asks|examines)|research questions?|we ask whether)\\b", "\\b(?:presented|phrased|shown)\\b.{0,80}\\b(?:true or false )?question\\b", "\\b(?:task|participants?|subjects?)\\b.{0,80}\\b(?:question|respond|answer)\\b", "\\b(?:asks?|asked|writes?|wrote|states?|stated|questioned)\\b.{0,50}[\\\"“][^\\\"”]{2,160}\\?[\\\"”]"]}
+    {
+      "code": "PROT-SECTION",
+      "kind": "section",
+      "names": [
+        "references",
+        "reference list",
+        "bibliography",
+        "acknowledgements",
+        "acknowledgments",
+        "publisher's note",
+        "publisher’s note"
+      ],
+      "patterns": [
+        "\\b(?:declaration|statement)\\b.*\\b(?:ai|artificial intelligence|generative ai)\\b",
+        "(?:appendix.*(?:method|methods|methodological)|(?:method|methods|methodological).*appendix)"
+      ]
+    },
+    {
+      "code": "PROT-AI",
+      "kind": "document_statement",
+      "patterns": [
+        "\\bai[- ]assistance disclosure\\b",
+        "\\b(?:this|the) (?:review|manuscript|paper|study)\\b.{0,120}\\b(?:ai[- ]assisted|ai tools? (?:assisted|were used)|artificial intelligence|generative ai)\\b",
+        "\\bai tools? assisted with\\b"
+      ]
+    },
+    {
+      "code": "PROT-CITATION",
+      "kind": "span",
+      "patterns": [
+        "\\([^()]{0,180}\\b(?:19|20)\\d{2}[a-z]?[^()]{0,80}\\)"
+      ]
+    },
+    {
+      "code": "PROT-NUMBER",
+      "kind": "span",
+      "patterns": [
+        "\\b\\d+(?:[.,]\\d+)?%?\\b",
+        "\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|first|second|third|fourth|fifth|sixth)\\b"
+      ]
+    },
+    {
+      "code": "PROT-HEDGE",
+      "kind": "span",
+      "patterns": [
+        "\\b(?:may|might|could|suggests?|appears?|is consistent with|possibly|probably|likely|unlikely)\\b"
+      ]
+    },
+    {
+      "code": "PROT-NEGATION",
+      "kind": "span",
+      "patterns": [
+        "\\b(?:not|no|never|neither|nor|does not|do not|did not|cannot|can't|without)\\b"
+      ]
+    },
+    {
+      "code": "PROT-QUESTION",
+      "kind": "context",
+      "patterns": [
+        "\\b(?:this (?:review|paper|study) (?:addresses|asks|examines)|research questions?|we ask whether)\\b",
+        "\\b(?:presented|phrased|shown)\\b.{0,80}\\b(?:true or false )?question\\b",
+        "\\b(?:task|participants?|subjects?)\\b.{0,80}\\b(?:question|respond|answer)\\b",
+        "\\b(?:asks?|asked|writes?|wrote|states?|stated|questioned)\\b.{0,50}[\\\"“][^\\\"”]{2,160}\\?[\\\"”]"
+      ]
+    }
   ]
 }

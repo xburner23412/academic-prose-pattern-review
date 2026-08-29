@@ -1,4 +1,4 @@
-import hashlib, importlib.util, json, subprocess, sys, tempfile, unittest, zipfile
+import hashlib, importlib.util, json, re, subprocess, sys, tempfile, unittest, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,9 +103,97 @@ class SourceAndSafety(unittest.TestCase):
         _,meta=MARK.load_docx(clean,None); self.assertEqual(meta["comments_excluded"],1)
         with self.assertRaises(ValueError): MARK.load_docx(changed,None)
         paras,meta=MARK.load_docx(changed,"accepted"); self.assertTrue(meta["tracked_changes"]); self.assertIn("inserted",paras[-1]["text"])
+    def codes_for(self,body):
+        td=tempfile.TemporaryDirectory(); self.addCleanup(td.cleanup)
+        path=Path(td.name)/"x.md"; path.write_text("# T\n\n"+body,encoding="utf-8")
+        result=MARK.scan(path,ROOT/"rules.json",None,False)
+        return [c for m in result["span_marks"] for c in m["codes"]]
+
+    def test_lex03_does_not_read_the_noun_function_as_a_copula(self):
+        """`executive function as` is a noun phrase, not an ornate copula.
+
+        Revision 1 matched `functions? as`, so `presented executive function as
+        not being deficit-specific` produced a mark in a real manuscript. The
+        rule now takes only the unambiguous third-person form.
+        """
+        self.assertNotIn("LEX-03", self.codes_for(
+            "Takio presented difficulties in executive function as not being deficit-specific."))
+        self.assertNotIn("LEX-03", self.codes_for(
+            "The authors treat cognitive function as a moderator of outcome."))
+        self.assertIn("LEX-03", self.codes_for(
+            "The task functions as a proxy for the underlying capacity."))
+        self.assertIn("LEX-03", self.codes_for(
+            "This measure serves as a bridge between the two literatures."))
+
+    def test_rht04_ignores_a_from_governed_by_a_separation_verb(self):
+        """`separate A from B to C` is a complement, not a range.
+
+        Revision 1 matched `from unique contributions to the same three skills`
+        inside `separate shared from unique contributions to ...`. Python's re
+        has no variable-width lookbehind, so the rule carries an `exclude`
+        window instead.
+        """
+        self.assertNotIn("RHT-04", self.codes_for(
+            "They used a dimensional approach to separate shared from unique "
+            "contributions to the same three skills."))
+        self.assertNotIn("RHT-04", self.codes_for(
+            "It is hard to distinguish inhibition from processing speed to any useful degree."))
+        self.assertIn("RHT-04", self.codes_for(
+            "Performance improved from baseline to follow-up across the study."))
+
+    def test_pattern_exclude_is_validated_and_applied(self):
+        """A broken `exclude` must fail at load, not at scan time."""
+        data=json.loads((ROOT/"rules.json").read_text(encoding="utf-8"))
+        excludes=[p for r in data["detection_rules"] for p in r.get("patterns",[]) if "exclude" in p]
+        self.assertTrue(excludes,"no rule exercises the exclude mechanism")
+        data["detection_rules"][0].setdefault("patterns",[{}])
+        data["detection_rules"][0]["patterns"]=[{"family":"x","regex":"a","exclude":"("}]
+        with self.assertRaises(re.error): MARK.validate_rules(data)
+
     def test_pdf_damage_gate_calibration(self):
         signals,_=MARK.pdf_damage(["short\nlines\nAReallyLongGluedAlphabeticalTokenHere �"])
         self.assertGreaterEqual(len(signals),2)
+    def inline_setup(self):
+        td=tempfile.TemporaryDirectory(); self.addCleanup(td.cleanup); base=Path(td.name)
+        src=base/"a.md"
+        src.write_text("# T\n\n"
+                       "The method serves as a bridge. Results demonstrate the effect in all cases.\n",
+                       encoding="utf-8")
+        review=MARK.scan(src,ROOT/"rules.json",None,False)
+        for m in review["span_marks"]: m["review_status"]="keep"; m["rationale"]="fixture"
+        return base,src,review
+
+    def test_inline_source_marks_the_manuscript_and_leaves_no_dead_anchor(self):
+        """--source lays the manuscript out; every mark must reach its card."""
+        base,src,review=self.inline_setup()
+        self.assertTrue(review["span_marks"],"fixture produced no marks")
+        paragraphs=RENDER.manuscript_paragraphs(review,src,None,False)[1]
+        page=RENDER.render(review,"en",paragraphs)
+        anchors=set(re.findall(r'href="#(M\d+)"',page))
+        cards=set(re.findall(r'class="card" id="(M\d+)"',page))
+        self.assertTrue(anchors,"no inline marks were drawn")
+        self.assertEqual(set(),anchors-cards,"a mark links to a card that does not exist")
+        # The anchor label sits inside the mark, so strip tags and labels
+        # before comparing: the manuscript body must survive the layout.
+        plain=re.sub(r"M\d{4}","",re.sub(r"<[^>]*>","",page))
+        self.assertIn("The method serves as a bridge",plain)
+        self.assertIn("Results demonstrate the effect in all cases",plain)
+
+    def test_inline_render_refuses_a_source_that_no_longer_matches(self):
+        """A stale source must never be annotated with old offsets."""
+        base,src,review=self.inline_setup()
+        moved=base/"b.md"; moved.write_text(src.read_text(encoding="utf-8")+"Extra.\n",encoding="utf-8")
+        with self.assertRaises(ValueError) as caught:
+            RENDER.manuscript_paragraphs(review,moved,None,False)
+        self.assertIn("no longer matches",str(caught.exception))
+
+    def test_without_source_the_report_stays_quotation_only(self):
+        """The review JSON alone must remain shareable without the manuscript."""
+        base,src,review=self.inline_setup()
+        page=RENDER.render(review,"en",None)
+        self.assertNotIn("<mark ",page)
+        self.assertIn("Source not supplied",page)
+
     def test_renderer_preserves_source_quote_and_shows_partial_coverage(self):
         result=self.scan_text("# T\n\nThe point is straightforward."); page=RENDER.render(result,"zh")
         self.assertIn("The point is straightforward.",page); self.assertIn("不完整",page); self.assertNotIn("AI 概率",page)
