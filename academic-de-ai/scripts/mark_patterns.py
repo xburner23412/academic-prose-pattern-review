@@ -34,8 +34,13 @@ def words(s): return WORD_RE.findall(s)
 def validate_rules(data):
     rules, lists = data.get("detection_rules", []), data.get("word_lists", {})
     codes = [r.get("code") for r in rules]
-    if data.get("schema") != "1.0" or len(rules) != 18 or len(codes) != len(set(codes)):
-        raise ValueError("rules.json must use schema 1.0 and contain 18 unique rules")
+    # The count lives in the data, not here: adding a rule must stay a JSON
+    # edit. Declaring it still catches a truncated or half-merged file.
+    declared = data.get("rule_count")
+    if data.get("schema") != "1.0" or not rules or len(codes) != len(set(codes)):
+        raise ValueError("rules.json must use schema 1.0 and carry unique, non-empty rules")
+    if declared is not None and declared != len(rules):
+        raise ValueError(f"rules.json declares {declared} rules but contains {len(rules)}")
     for r in rules:
         if r.get("kind") not in KINDS or r.get("review_priority") not in PRIORITY: raise ValueError(f"{r.get('code')}: invalid kind or priority")
         v = r.get("verification", {})

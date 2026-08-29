@@ -35,7 +35,7 @@ So the design question here is not "does this pattern identify an author" but
 - Reads Markdown, TXT, DOCX and PDF.
 - Excludes headings, references, acknowledgements, AI-use declarations and
   methods appendices from scanning, and reports what it excluded.
-- Applies 18 feature rules — 13 automatic, 5 requiring a full read.
+- Applies 20 feature rules — 14 automatic, 6 requiring a full read.
 - Runs a protection pass so a marked span that carries a citation, a quantity, a
   hedge, a negation or a research question is labelled protected rather than
   offered as a problem.
@@ -124,6 +124,8 @@ automatic mark — happens when you invoke the skill.
 | `LEX-05` | shallow significance participle | automatic |
 | `LOG-01` | claim strength exceeds evidence | automatic |
 | `LOG-02` | scope or causal overgeneralization | automatic |
+| `CIT-01` | citation placement and stacking | automatic |
+| `LEX-06` | invented paraphrase of a standard expression | reading |
 
 A single watched word never produces a mark. A promotional word has to form a
 complete construction or cluster with other features.
@@ -164,9 +166,9 @@ These are constraints, not preferences.
   parts — headers, footers, footnotes, text boxes — need inspection.
 - **Language and field.** English social-science and psychology prose. The rules
   were built and read against that register.
-- **Five rules need a human.** `RHT-03`, `META-04`, `META-05`, `META-06` and
-  `STR-02` have no automatic implementation and are listed as unchecked in a fast
-  scan.
+- **Six rules need a human.** `RHT-03`, `META-04`, `META-05`, `META-06`,
+  `STR-02` and `LEX-06` have no automatic implementation and are listed as
+  unchecked in a fast scan.
 
 ## Status
 

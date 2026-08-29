@@ -15,7 +15,9 @@ class SimplifiedRules(unittest.TestCase):
     def setUp(self): self.lists=RULES["word_lists"]; self.by_code={r["code"]:r for r in RULES["detection_rules"]}
     def hits(self,code,text): return MARK.rule_matches(self.by_code[code],text,self.lists)
     def test_exactly_eighteen_semantic_codes(self):
-        self.assertEqual(len(self.by_code),18); self.assertFalse(any(c.startswith("OTHER-") for c in self.by_code))
+        data=json.loads((ROOT/"rules.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(self.by_code),data["rule_count"],"rule_count disagrees with the table")
+        self.assertFalse(any(c.startswith("OTHER-") for c in self.by_code))
         for rule in self.by_code.values(): self.assertEqual(rule["verification"]["rule_revision"],rule["rule_revision"])
     def test_automatic_positive_examples(self):
         cases={
@@ -35,8 +37,41 @@ class SimplifiedRules(unittest.TestCase):
         for code,text in cases.items():
             with self.subTest(code=code): self.assertTrue(self.hits(code,text))
     def test_reading_rules_are_explicit_not_scanned(self):
-        reading={r["code"] for r in RULES["detection_rules"] if r["kind"]=="reading"}
-        self.assertEqual(reading,{"RHT-03","META-04","META-05","META-06","STR-02"})
+        """Reading rules must be declared, and a fast scan must name them.
+
+        The set is read from the table rather than fixed here, so adding a
+        reading rule stays a JSON edit. What is asserted is the contract: every
+        reading rule carries no patterns and is reported as unchecked.
+        """
+        reading=[r for r in RULES["detection_rules"] if r["kind"]=="reading"]
+        self.assertTrue(reading,"no reading rules are declared")
+        for rule in reading:
+            with self.subTest(code=rule["code"]):
+                self.assertFalse(rule.get("patterns"),"a reading rule must not be scannable")
+        td=tempfile.TemporaryDirectory(); self.addCleanup(td.cleanup)
+        path=Path(td.name)/"x.md"; path.write_text("# T\n\nThe point is straightforward.",encoding="utf-8")
+        listed=MARK.scan(path,ROOT/"rules.json",None,False)["reading_coverage"]["reading_rule_codes"]
+        self.assertEqual(set(listed),{r["code"] for r in reading})
+    def test_cit01_marks_stacked_and_agentless_citations(self):
+        """Citation placement, the project's own P2 criterion.
+
+        This one is not an AI signal and must not be sold as one: on the context
+        bench the AI-assisted document scores zero and a 2021 human review
+        scores highest. It marks whether a reader can tell which source supports
+        which claim.
+        """
+        self.assertTrue(self.hits("CIT-01",
+            "Control develops unevenly across children (Grant et al., 2020; "
+            "Horowitz-Kraus et al., 2026; Pedemonte et al., 2024)."))
+        self.assertTrue(self.hits("CIT-01",
+            "It has been shown that inhibition matures late (Welsh et al., 1991)."))
+        self.assertFalse(self.hits("CIT-01",
+            "Liotti et al. (2010) compared three groups on a stop-signal task."),
+            "narrative form is the preferred shape and must not be marked")
+        self.assertFalse(self.hits("CIT-01",
+            "The effect was moderate (Kaiser et al., 2020)."),
+            "a single trailing source is ordinary and must not be marked")
+
     def test_single_inflated_word_is_not_a_mark(self): self.assertFalse(self.hits("LEX-01","The estimate was robust."))
     def test_lex_cluster_uses_paragraph_scope_across_sentences(self):
         td=tempfile.TemporaryDirectory(); self.addCleanup(td.cleanup); path=Path(td.name)/"x.md"; path.write_text("# T\n\nThe account is compelling. The estimate is robust.",encoding="utf-8")
@@ -210,7 +245,7 @@ class SourceAndSafety(unittest.TestCase):
         self.assertTrue(any("does not resolve" in x for x in VALIDATE.validate(result,path,ROOT/"rules.json")))
     def test_complete_reading_requires_every_mark_to_be_adjudicated(self):
         td=tempfile.TemporaryDirectory(); self.addCleanup(td.cleanup); path=Path(td.name)/"x.md"; path.write_text("# T\n\nThe point is straightforward.",encoding="utf-8"); result=MARK.scan(path,ROOT/"rules.json",None,False)
-        result["reading_coverage"]={"status":"complete","reviewed_sections":["T"],"unreviewed_sections":[],"reading_rule_codes":["RHT-03","META-04","META-05","META-06","STR-02"]}
+        result["reading_coverage"]={"status":"complete","reviewed_sections":["T"],"unreviewed_sections":[],"reading_rule_codes":sorted(r["code"] for r in RULES["detection_rules"] if r["kind"]=="reading")}
         self.assertTrue(any("unreviewed marks" in x for x in VALIDATE.validate(result,path,ROOT/"rules.json")))
         result["span_marks"][0]["review_status"]="keep"; result["span_marks"][0]["rationale"]="The sentence restates the preceding claim as a punchline."
         self.assertEqual(VALIDATE.validate(result,path,ROOT/"rules.json"),[])
@@ -218,7 +253,7 @@ class SourceAndSafety(unittest.TestCase):
         td=tempfile.TemporaryDirectory(); self.addCleanup(td.cleanup); path=Path(td.name)/"x.md"; path.write_text("# T\n\nThe point is straightforward.",encoding="utf-8"); result=MARK.scan(path,ROOT/"rules.json",None,False)
         result["reading_coverage"]["reading_rule_codes"]=[]
         self.assertTrue(any("reading_rule_codes" in x for x in VALIDATE.validate(result,path,ROOT/"rules.json")))
-        result=MARK.scan(path,ROOT/"rules.json",None,False); result["reading_coverage"]={"status":"partial","reviewed_sections":["Invented"],"unreviewed_sections":["T"],"reading_rule_codes":["RHT-03","META-04","META-05","META-06","STR-02"]}
+        result=MARK.scan(path,ROOT/"rules.json",None,False); result["reading_coverage"]={"status":"partial","reviewed_sections":["Invented"],"unreviewed_sections":["T"],"reading_rule_codes":sorted(r["code"] for r in RULES["detection_rules"] if r["kind"]=="reading")}
         self.assertTrue(any("partition" in x or "overlap" in x for x in VALIDATE.validate(result,path,ROOT/"rules.json")))
         result=MARK.scan(path,ROOT/"rules.json",None,False); result["span_marks"][0]["origin"]="model_reading"; result["span_marks"][0]["codes"]=["LOG-01"]
         self.assertTrue(any("lacks a reading-rule" in x for x in VALIDATE.validate(result,path,ROOT/"rules.json")))

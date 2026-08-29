@@ -1,5 +1,6 @@
 {
   "schema": "1.0",
+  "rule_count": 20,
   "word_lists": {
     "evaluated_nouns": [
       "answer",
@@ -672,6 +673,68 @@
           }
         },
         "note": "A01 conditional scope cue reread; contextual protection remains mandatory."
+      }
+    },
+    {
+      "code": "CIT-01",
+      "kind": "regex",
+      "name": "citation placement and stacking",
+      "name_zh": "引用位置与堆积",
+      "review_priority": "low",
+      "enabled": true,
+      "span": "sentence",
+      "patterns": [
+        {
+          "family": "stacked_parenthetical",
+          "regex": "\\([^()]{0,200}?\\b(?:19|20)\\d{2}[a-z]?(?:\\s*;[^()]{0,120}?\\b(?:19|20)\\d{2}[a-z]?){2,}\\)"
+        },
+        {
+          "family": "agentless_attribution",
+          "regex": "\\b(?:it\\s+(?:has\\s+been|is|was)\\s+(?:shown|found|reported|demonstrated|argued|suggested)|(?:has|have)\\s+been\\s+(?:shown|reported|found|demonstrated)|(?:studies|research|evidence|work)\\s+(?:has|have)\\s+shown)\\b[^.]{0,140}?\\([^()]{0,160}?\\b(?:19|20)\\d{2}[a-z]?\\)"
+        }
+      ],
+      "note": "Review where the citation sits relative to the claim it supports. Narrative form (`Kaiser et al. (2020) found ...`) when the study is the topic of the sentence; a trailing parenthetical only when the source merely backs a point. The second family catches an agentless attribution that hides who found what. This is a placement question, not an AI signal: on this project's context bench a 2021 human review stacked three or more sources at 3.67 per 1,000 words while the AI-assisted document did so zero times. Stacking is ordinary academic practice and a mark here asks only whether the reader can tell which source supports which claim.",
+      "note_zh": "检查引用相对于它支持的主张放在哪里。研究本身是句子主题时用叙述式（Kaiser et al. (2020) found ...）；来源只是佐证时才用句末括注。第二个家族抓无主语归属，它掩盖了是谁发现的。这是位置问题，不是 AI 信号：本项目对照台上，2021 年那篇真人综述每千词堆 3.67 处，AI 辅助文档是 0 处。堆叠是常规学术写法，这里的标记只问读者能否分清哪条来源支持哪个主张。",
+      "rule_revision": 1,
+      "verification": {
+        "status": "verified",
+        "rule_revision": 1,
+        "documents": {
+          "A01": {
+            "marks": 0
+          },
+          "H01": {
+            "marks": 21
+          },
+          "H02": {
+            "marks": 6
+          },
+          "H03": {
+            "marks": 3
+          },
+          "unpublished_draft": {
+            "marks": 12
+          }
+        },
+        "note": "All 42 hits reread. None is a parsing misfire: each is either three or more sources in one parenthetical or an agentless attribution carrying a citation. The distribution is the point — the AI-assisted document scores zero and the 2021 human review scores highest — so this rule marks a citation-placement question under the project's own editorial standard and is not evidence of anything about authorship. One H03 hit co-occurs with LOG-01, which is the co-occurrence signal working as intended."
+      }
+    },
+    {
+      "code": "LEX-06",
+      "kind": "reading",
+      "name": "invented paraphrase of a standard expression",
+      "name_zh": "自造说法替换标准表达",
+      "review_priority": "high",
+      "enabled": true,
+      "span": "sentence",
+      "note": "Does a phrase replace the field's conventional wording with an invented one? Judge the head collocation, not the whole n-gram: almost every four-word sequence of English is rare, and a control on prose nobody objected to returned the same rarity as the text under review. A coinage is a phrase whose standard alternative is in common use and whose own form is not, such as `explains least well` for `is weakest`. Technical terms of art are not coinages.",
+      "note_zh": "某个说法是不是把本领域的惯用表达换成了自造的？判断依据是核心搭配，不是整个 n-gram：几乎任何四词英文序列都是罕见的，对无人异议的文本做同样测量得到同样的罕见度。生造词指的是：它的标准替代说法很常见，而它自己的形式不常见，例如用 explains least well 代替 is weakest。专业术语不算生造。",
+      "rule_revision": 1,
+      "verification": {
+        "status": "unverified",
+        "rule_revision": 1,
+        "documents": {},
+        "note": "New reading rule; no automatic implementation exists."
       }
     }
   ],

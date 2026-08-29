@@ -4,7 +4,7 @@ This reference defines what the skill reviews. A mark is a request for
 contextual reading, not a claim about who wrote the text. The executable source
 of truth is `rules.json`; this file explains the semantics.
 
-## The 18 feature codes
+## The 20 feature codes
 
 ### Automatic span rules
 
@@ -22,6 +22,7 @@ of truth is `rules.json`; this file explains the semantics.
 | `LEX-05` | Does a trailing participial phrase announce significance without adding evidence? |
 | `LOG-01` | Does the strength of a claim exceed the evidence in its sentence and local argument? The cue alone is not the answer. |
 | `LOG-02` | Does a scope or causal claim outrun the population, design, diagnosis, or mechanism actually studied? |
+| `CIT-01` | Can a reader tell which source supports which claim? Three or more sources in one parenthetical, or an agentless attribution that hides who found what. Not an AI signal: the context bench's human reviews stack more heavily than the AI-assisted document. |
 
 ### Full-reading rules
 
@@ -35,6 +36,7 @@ sections and add any marks with `origin: model_reading`.
 | `META-05` | Does defensive prose answer an objection that has no source and no role in the argument? |
 | `META-06` | Does the text invent an option no serious reader would choose, reject it, and never use it again? |
 | `STR-02` | Is one item in a group of three redundant, vague, or rhythm-filling? Real three-part entities are protected. |
+| `LEX-06` | Does a phrase replace the field's conventional wording with an invented one? Judge the head collocation, not the whole n-gram: almost every four-word sequence of English is rare. Terms of art are not coinages. |
 
 ### Document observation
 
@@ -43,6 +45,24 @@ sections and add any marks with `origin: model_reading`.
 not compare the manuscript with “human writing,” call the pattern abnormal,
 infer AI involvement, enter mark priority, or recommend splitting or merging
 paragraphs. If its calibrated conditions are not met, omit it.
+
+## Where the rules come from
+
+Three sources, and the third was added late after an audit found it missing.
+
+1. Wikipedia's *Signs of AI writing* and the `humanizer` skill, both about
+   general prose.
+2. This project's own measurements against an AI-assisted review and three
+   pre-ChatGPT articles.
+3. The editorial criteria this project accumulated while revising one essay by
+   hand, recorded as `P0`-`P6` in the project handoff.
+
+The third source was nearly lost. Its lessons were written down as constraints
+on the reviser -- do not break a citation, do not invent a paraphrase -- so when
+version 1 stopped editing, they had nowhere to live. `CIT-01` and `LEX-06` are
+those criteria restated as things to look for in the manuscript. Anything an
+editing mode would need to avoid doing still has no detection counterpart, and
+that gap returns the moment an apply mode exists.
 
 ## Review priority and verification
 
