@@ -1,0 +1,109 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: unit (py${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      # The tests import only the standard library. Nothing to install: if this
+      # job ever needs a dependency, that is a finding, not a fix.
+      - run: python -m unittest discover -s academic-de-ai/tests -p "test_*.py" -v
+
+  smoke:
+    name: end-to-end on a fixture
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Write a fixture that triggers several rules
+        run: |
+          mkdir -p /tmp/fixture
+          cat > /tmp/fixture/article.md <<'MD'
+          # A short review
+
+          ## Introduction
+
+          The point is straightforward: the groups differed on every measure we
+          collected. This review examines whether that difference holds.
+
+          The method serves as a bridge between two literatures. Results
+          demonstrate that the effect is present in all participants, and the
+          approach is particularly promising for future work.
+
+          ## Conclusion
+
+          The most informative comparison is the one nobody has run. Its promise
+          depends on careful design, transparent reporting, and replication.
+          MD
+
+      - name: Scan
+        run: |
+          python academic-de-ai/scripts/mark_patterns.py \
+            /tmp/fixture/article.md --out /tmp/fixture/review.json
+
+      - name: Validate the review against its source
+        run: |
+          python academic-de-ai/scripts/validate_review.py \
+            /tmp/fixture/review.json --source /tmp/fixture/article.md
+
+      - name: Render both languages
+        run: |
+          python academic-de-ai/scripts/render_marked_report.py \
+            /tmp/fixture/review.json --out /tmp/fixture/report.en.html --lang en
+          python academic-de-ai/scripts/render_marked_report.py \
+            /tmp/fixture/review.json --out /tmp/fixture/report.zh.html --lang zh
+
+      - name: The source must be untouched and the run must be marked partial
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib, sys
+
+          article = pathlib.Path("/tmp/fixture/article.md")
+          review = json.loads(pathlib.Path("/tmp/fixture/review.json").read_text("utf-8"))
+
+          # A fast scan never claims a complete review.
+          status = review["reading_coverage"]["status"]
+          assert status != "complete", f"fast scan reported {status!r}"
+          assert review["reading_coverage"]["reading_rule_codes"], "no unchecked reading rules listed"
+
+          # The recorded hash must still match the file on disk: the scanner
+          # must never write to its own input.
+          recorded = review["source"]["sha256"]
+          actual = hashlib.sha256(article.read_bytes()).hexdigest()
+          assert recorded == actual, "source changed during the run"
+
+          assert review["span_marks"], "the fixture produced no marks at all"
+          for mark in review["span_marks"]:
+              assert mark["quote"], mark["mark_id"]
+              assert mark["source_locator"], mark["mark_id"]
+
+          print(f"{len(review['span_marks'])} marks, coverage {status}, source intact")
+          PY
+
+      - name: Refuse to overwrite an existing report
+        run: |
+          if python academic-de-ai/scripts/render_marked_report.py \
+               /tmp/fixture/review.json --out /tmp/fixture/report.en.html --lang en; then
+            echo "renderer overwrote an existing file"; exit 1
+          fi
+          echo "overwrite correctly refused"

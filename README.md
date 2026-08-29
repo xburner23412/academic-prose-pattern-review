@@ -1,5 +1,7 @@
 # academic-prose-pattern-review
 
+[![tests](https://github.com/xburner23412/academic-prose-pattern-review/actions/workflows/tests.yml/badge.svg)](https://github.com/xburner23412/academic-prose-pattern-review/actions/workflows/tests.yml)
+
 A review skill that marks formulaic, over-performed, or evidence-straining
 features in English academic prose, so a person can read those passages again in
 context.
